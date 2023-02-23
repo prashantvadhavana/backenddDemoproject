@@ -49,19 +49,32 @@ exports.register = {
         });
         if (data !== null) {
           const accessToken = await token(Usermodal, data);
-          const mailOptions = {
-            from: "prashantvadhavana.vision@gmail.com", // Sender address
-            to: data["email"], // List of recipients
-            subject: "Node Mailer", // Subject line
-            html: `http://localhost:8080/api/registration/signUp/varify:${accessToken.token}`,
-          };
-          transport.sendMail(mailOptions, async function (err, info) {
-            if (err) {
-              console.log("Email not send error something is wrong", err);
-            } else {
-              console.log("Email has been sent.d");
+          ejs.renderFile(
+            __dirname + "/mail.ejs",
+            {
+              name: "prashantvadhvana@gmail.com",
+              action_url: `http://localhost:8080/api/registration/signUp/varify:${accessToken.token}`,
+            },
+            async function (err, data) {
+              const mailOptions = {
+                from: "prashantvadhavana.vision@gmail.com", // Sender address
+                to: isCreated["email"], // List of recipients
+                subject: "Node Mailer", // Subject line
+                html: data,
+              };
+              transport.sendMail(mailOptions, async function (err, info) {
+                if (err) {
+                  console.log("Email not send error something is wrong", err);
+                } else {
+                  console.log("Email has been sent.d");
+                }
+              });
+              successResponse(res, {
+                message: "User created successfully",
+                token: accessToken.token,
+              });
             }
-          });
+          );
           badRequestResponse(res, {
             message: "palace check your mail and verify you mail address",
           });
@@ -73,23 +86,32 @@ exports.register = {
             });
           } else {
             const accessToken = await token(Usermodal, isCreated);
-            const mailOptions = {
-              from: "prashantvadhavana.vision@gmail.com", // Sender address
-              to: isCreated["email"], // List of recipients
-              subject: "Node Mailer", // Subject line
-              html: `http://localhost:8080/api/registration/signUp/varify:${accessToken.token}`,
-            };
-            transport.sendMail(mailOptions, async function (err, info) {
-              if (err) {
-                console.log("Email not send error something is wrong", err);
-              } else {
-                console.log("Email has been sent.d");
+            ejs.renderFile(
+              __dirname + "/mail.ejs",
+              {
+                name: "prashantvadhvana@gmail.com",
+                action_url: `http://localhost:8080/api/registration/signUp/varify:${accessToken.token}`,
+              },
+              async function (err, data) {
+                const mailOptions = {
+                  from: "prashantvadhavana.vision@gmail.com", // Sender address
+                  to: isCreated["email"], // List of recipients
+                  subject: "Node Mailer", // Subject line
+                  html: data,
+                };
+                transport.sendMail(mailOptions, async function (err, info) {
+                  if (err) {
+                    console.log("Email not send error something is wrong", err);
+                  } else {
+                    console.log("Email has been sent.d");
+                  }
+                });
+                successResponse(res, {
+                  message: "User created successfully",
+                  token: accessToken.token,
+                });
               }
-            });
-            successResponse(res, {
-              message: "User created successfully",
-              token: accessToken.token,
-            });
+            );
           }
         }
       }
@@ -187,7 +209,7 @@ exports.register = {
               {
                 token: accessToken.token,
               }
-            )
+            );
           }
           ejs.renderFile(
             __dirname + "/Forgetpassword.ejs",
