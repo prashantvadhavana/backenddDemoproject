@@ -55,12 +55,12 @@ exports.register = {
               name: "prashantvadhvana@gmail.com",
               action_url: `http://localhost:8080/api/registration/signUp/varify:${accessToken.token}`,
             },
-            async function (err, data) {
+            async function (err, mail) {
               const mailOptions = {
                 from: "prashantvadhavana.vision@gmail.com", // Sender address
-                to: isCreated["email"], // List of recipients
+                to: data["email"], // List of recipients
                 subject: "Node Mailer", // Subject line
-                html: data,
+                html: mail,
               };
               transport.sendMail(mailOptions, async function (err, info) {
                 if (err) {
@@ -69,15 +69,11 @@ exports.register = {
                   console.log("Email has been sent.d");
                 }
               });
-              successResponse(res, {
-                message: "User created successfully",
-                token: accessToken.token,
+              badRequestResponse(res, {
+                message: "palace check your mail and verify you mail address",
               });
             }
           );
-          badRequestResponse(res, {
-            message: "palace check your mail and verify you mail address",
-          });
         } else {
           const isCreated = await Usermodal(req.body).save();
           if (!isCreated) {
